@@ -58,6 +58,8 @@ app.locals.title = 'Woah, dude, an express app!';
 app.use(session({
   secret: "shhh-super-sectet-key",
   cookie: { maxAge: 60000 },
+  resave: true,
+  saveUninitialized: true,
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     ttl: 24 * 60 * 60 // 1 day
