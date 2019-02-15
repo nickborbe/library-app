@@ -9,6 +9,10 @@ const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 
+const session = require('express-session');
+
+const MongoStore = require('connect-mongo')(session);
+
 
 mongoose.Promise = Promise;
 mongoose
@@ -51,6 +55,18 @@ app.locals.title = 'Woah, dude, an express app!';
 
 
 
+app.use(session({
+  secret: "shhh-super-sectet-key",
+  cookie: { maxAge: 60000 },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60 // 1 day
+  })
+}));
+
+
+
+
 const index = require('./routes/index');
 app.use('/', index);
 
@@ -59,6 +75,9 @@ app.use('/', bookRoutes);
 
 const authorRoutes = require('./routes/author-routes');
 app.use('/', authorRoutes);
+
+const userRoutes = require('./routes/user-routes');
+app.use('/', userRoutes);
 
 
 module.exports = app;

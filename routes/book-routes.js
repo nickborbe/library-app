@@ -7,10 +7,21 @@ const Author  = require('../models/Author');
 
 
 router.get('/books', (req, res, next)=>{
+
+        // if(req.session.counter){
+        //     req.session.counter++;
+        // }else{
+        //     req.session.counter = 1;
+        // }
+        // this is a useless example of how oyu can edit the session whenever/however you want
+
     Book.find()
     .then((allTheBooks)=>{
 
-        res.render('book-views/books-list', {books: allTheBooks})
+        res.render('book-views/books-list', {
+            books: allTheBooks,
+            theUser: req.session.currentuser
+        })
 
     })
     .catch((err)=>{
