@@ -27,8 +27,6 @@ router.get('/books/details/:theid', (req, res, next)=>{
 
     Book.findById(id).populate('author')
     .then((bookObject)=>{
-
-
         res.render('book-views/details', {theBook: bookObject})
     })
     .catch((err)=>{
