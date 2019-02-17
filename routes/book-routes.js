@@ -23,8 +23,6 @@ router.get('/books', (req, res, next)=>{
 
 router.get('/books/details/:theid', (req, res, next)=>{
     let id = req.params.theid
-
-
     Book.findById(id).populate('author')
     .then((bookObject)=>{
         res.render('book-views/details', {theBook: bookObject})
