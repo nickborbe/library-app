@@ -30,7 +30,6 @@ router.get('/books/details/:theid', (req, res, next)=>{
 
 
         res.render('book-views/details', {theBook: bookObject})
-
     })
     .catch((err)=>{
         next(err);
