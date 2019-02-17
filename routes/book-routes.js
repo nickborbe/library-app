@@ -96,7 +96,23 @@ router.get('/books/editbook/:id', (req, res, next)=>{
 
     Book.findById(id)
     .then((theBook)=>{
-        res.render('book-views/edit', {book: theBook})
+        Author.find()
+        .then((allAuthors)=>{
+
+            allAuthors.forEach((eachAuthor)=>{
+                if(eachAuthor._id.equals(theBook.author)){
+                    // we're not allowed to use === to compare IDs
+                    // just because mongoose wont let you
+                    // but instead they have their own method called .equals
+                    eachAuthor.isTheChosenOne = true;
+                }
+            })
+
+            res.render('book-views/edit', {book: theBook, authors:allAuthors})
+        })
+        .catch((err)=>{
+            next(err);
+        })
     })
     .catch((err)=>{
         next(err)
