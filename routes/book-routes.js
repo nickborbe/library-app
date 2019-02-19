@@ -49,11 +49,7 @@ router.get('/books/create-new-book', (req, res, next)=>{
     .catch((err)=>{
         next(err)
     })
-    
-
-    
 })
-
 
 
 router.post('/books/creation', (req, res, next)=>{
