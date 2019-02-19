@@ -32,7 +32,7 @@ router.get('/books/details/:theid', (req, res, next)=>{
     })
 })
 
-
+// get route to view page to create new books
 router.get('/books/create-new-book', (req, res, next)=>{
 
     // we need a list of all the authors on this page so we do
