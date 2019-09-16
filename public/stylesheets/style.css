@@ -1,22 +1,17 @@
-
-
 a {
-  color: #00B7FF;
-}
+  color: #00B7FF; }
 
-
-
-.navbar{
+.navbar {
   width: 100%;
   height: 75px;
   border-bottom: 1px solid black;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-}
+  align-items: center; }
 
-.navbar a{
+.navbar a {
   color: black;
   font-size: 24px;
-  text-decoration: none;
-}
+  text-decoration: none; }
+
+/*# sourceMappingURL=style.css.map */
