@@ -9,7 +9,7 @@ router.get('/authors', (req, res, next)=>{
     Author.find()
     .then((result)=>{
 
-        res.render('TBD', {authors: result})
+        res.render('author-views/list', {authors: result})
 
     })
     .catch((err)=>{
@@ -27,7 +27,7 @@ router.get('/authors/details/:theid', (req, res, next)=>{
     Author.findById(id)
     .then((result)=>{
 
-        res.render('TBD', {theAuthor: result})
+        res.render('author-views/one-single-author', {theAuthor: result})
 
     })
     .catch((err)=>{
