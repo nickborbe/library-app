@@ -4,8 +4,8 @@ const Schema = mongoose.Schema
 
 const bookSchema = new Schema({
 
-    title: String,
-    author: String,
+    title: {type: String},
+    author: {type: Schema.Types.ObjectId, ref: 'Author'},
     image: String
 
 })

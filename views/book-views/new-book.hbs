@@ -13,7 +13,17 @@
 
 
 <p>Author</p>
-<input type="text" name="theAuthor">
+<select name="theAuthor">
+
+    <option value="" selected disabled>Please Select One</option>
+
+{{#each allTheAuthors}}
+
+<option value="{{this._id}}">{{this.name}}</option>
+
+{{/each}} 
+
+</select>
 
 
 <p>Image</p>

@@ -1,7 +1,8 @@
 const express = require('express');
 const router  = express.Router();
 
-const Book = require('../models/Book')
+const Book    = require('../models/Book');
+const Author  = require('../models/Author'); 
 
 
 
@@ -24,7 +25,7 @@ router.get('/books/details/:theid', (req, res, next)=>{
     let id = req.params.theid
 
 
-    Book.findById(id)
+    Book.findById(id).populate('author')
     .then((bookObject)=>{
 
         res.render('book-views/details', {theBook: bookObject})
@@ -38,12 +39,24 @@ router.get('/books/details/:theid', (req, res, next)=>{
 
 
 router.get('/books/create-new-book', (req, res, next)=>{
-    res.render('book-views/new-book');
+
+    Author.find()
+    .then((result)=>{
+        
+        res.render('book-views/new-book', {allTheAuthors: result});
+    })
+    .catch((err)=>{
+        next(err)
+    })
+    
+
 })
 
 
 
 router.post('/books/creation', (req, res, next)=>{
+
+    console.log('=-=-=--=--=', req.body)
 
     let title = req.body.theTitle;
     let author = req.body.theAuthor;
