@@ -9,9 +9,12 @@ const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 
-const session = require('express-session');
+const session      = require('express-session');
 
-const MongoStore = require('connect-mongo')(session);
+const MongoStore   = require('connect-mongo')(session);
+
+const flash        = require("connect-flash");
+
 
 
 mongoose.Promise = Promise;
@@ -65,6 +68,21 @@ app.use(session({
     ttl: 24 * 60 * 60 // 1 day
   })
 }));
+
+app.use(flash());
+
+
+
+app.use((req, res, next)=>{
+  res.locals.theUser = req.session.currentuser;
+
+  res.locals.errorMessage = req.flash('error');
+
+  next();
+})
+// creating a universal variable inside all the hbs files called theUser
+// this variable is equal to the user in the session
+// that means if there's no user in the session, this variable will be null/undefined (not sure which one)
 
 
 
