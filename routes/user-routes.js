@@ -57,6 +57,11 @@ router.post('/login', (req, res, next)=>{
 User.findOne({ username: username })
   .then(userfromDB => {
       if (!userfromDB) {
+
+            req.flash('error', 'sorry that username doesnt exist');
+            // this is the same as doing the line below, just that flash does not allow us to interact with the object directly so it has special getters & setters
+            // req.flash.error = 'sorry that username doesnt exist'
+
         res.redirect('/');
       }
       if (bcrypt.compareSync(password, userfromDB.password)) {

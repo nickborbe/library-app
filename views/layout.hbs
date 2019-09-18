@@ -6,15 +6,26 @@
   </head>
   <body>
 
+    {{#if errorMessage}}
+    <div>{{errorMessage}}</div>
+    {{/if}}
+
     <div class="navbar">
       <a href="/books">All Books</a>
       <a href="/books/create-new-book">Add a New Book</a> 
       <a href="/authors">View Authors</a>
 
+      {{#unless theUser}}
+      <a href="/signup">Signup</a>
+      <a href="/login">Login</a>
+      {{/unless}}
 
+
+    {{#if theUser}}
     <form action="/logout" method="POST">
     <button>Logout</button>
     </form>
+    {{/if}}
 
     </div>
 
