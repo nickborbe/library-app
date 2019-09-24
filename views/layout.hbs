@@ -10,6 +10,13 @@
     <div>{{errorMessage}}</div>
     {{/if}}
 
+
+    {{#if theUser}}
+
+    <img style="width: 300px" src="{{theUser.profileImage}}"
+
+    {{/if}}
+
     <div class="navbar">
       <a href="/books">All Books</a>
       <a href="/books/create-new-book">Add a New Book</a> 

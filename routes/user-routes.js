@@ -5,6 +5,8 @@ const User    = require('../models/User');
 const bcrypt  = require('bcryptjs');
 
 
+const magicUploadTool = require('../config/coudinary-settings');
+
 
 router.get('/signup', (req, res, next)=>{
 
@@ -15,7 +17,7 @@ router.get('/signup', (req, res, next)=>{
 
 
 
-router.post('/signup', (req, res, next)=>{
+router.post('/signup',magicUploadTool.single('the-image-input-name') ,(req, res, next)=>{
 
     const username = req.body.theUsername;
     const password = req.body.thePassword;
@@ -25,12 +27,22 @@ router.post('/signup', (req, res, next)=>{
 
     const hash = bcrypt.hashSync(password, salt);
 
+    console.log('=-=-=-=-=-=-=-=-=-=-=-=-')
+    console.log(req.body)
+    console.log('=-=-=-=-=-=-=-=-=-=-=-=-')
+    console.log(req.file)
 
 
-    User.create({
-        username: username,
-        password: hash
-    })
+    let userObj = {};
+    userObj.username = username;
+    userObj.password = hash;
+
+    if(req.file){
+        userObj.profileImage = req.file.url
+    }
+
+
+    User.create(userObj)
     .then(()=>{
 
         res.redirect('/')

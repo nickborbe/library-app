@@ -1,7 +1,7 @@
 
 <h1>Signup</h1>
 
-<form action="/signup" method="POST">
+<form action="/signup" method="POST" enctype="multipart/form-data">
 
 
 <p>Username</p>
@@ -9,6 +9,13 @@
 
 <p>Password</p>
 <input type="password" name="thePassword">
+
+<p>Profile Picture</p>
+<input type="file" name="the-image-input-name">
+
+<br>
+<br>
+<br>
 
 
 <button>Submit</button>
