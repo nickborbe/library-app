@@ -7,6 +7,8 @@ const bcrypt  = require('bcryptjs');
 
 const magicUploadTool = require('../config/coudinary-settings');
 
+const nodemailer = require('nodemailer');
+
 
 router.get('/signup', (req, res, next)=>{
 
@@ -18,6 +20,20 @@ router.get('/signup', (req, res, next)=>{
 
 
 router.post('/signup',magicUploadTool.single('the-image-input-name') ,(req, res, next)=>{
+    console.log('=-=-=-=-', process.env.USER_NAME_GOOGLE, process.env.PASS)
+
+
+    let transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.USER_NAME_GOOGLE,
+          pass: process.env.PASS
+        }
+      });
+
+
+
+
 
     const username = req.body.theUsername;
     const password = req.body.thePassword;
@@ -36,6 +52,8 @@ router.post('/signup',magicUploadTool.single('the-image-input-name') ,(req, res,
     let userObj = {};
     userObj.username = username;
     userObj.password = hash;
+    userObj.email = req.body.email;
+    userObj.active = false
 
     if(req.file){
         userObj.profileImage = req.file.url
@@ -43,14 +61,57 @@ router.post('/signup',magicUploadTool.single('the-image-input-name') ,(req, res,
 
 
     User.create(userObj)
-    .then(()=>{
+    .then((userThatJustGotCreated)=>{
+// send the email in the .then because .then only happens if it works
+// and also, it waits until after
 
-        res.redirect('/')
+
+// remember the user is typing in their email address
+// as req.body.theUsername because I was too lazy to change the name everywhere
+transporter.sendMail({
+    from: '"My Awesome Project 👻" <myawesome@project.com>',
+    to: req.body.email, 
+    subject: "Thank you for signing up", 
+    text: "Thanks for signing up.  Good luck with your anachronistic flip phone",
+    html: `
+    <h2>Thank You </h2>
+    <p>Coolboy55 Thanks you for signing up for this service</p>
+    <p>In Order to complete the signup process please confirm your email by clicking on the following link</p>
+    <a href="http://localhost:3000/confirmation/${userThatJustGotCreated._id}"   >Confirm Email</a>
+    `
+  })
+  .then((result)=>{
+      req.flash('error', 'please check your email for a welcome email')
+    res.redirect('/')
+  })  
+  .catch((err)=>{
+      next(err)
+  })
+
+
+
+
+
+       
 
     })
     .catch((err)=>{
         next(err)
     })
+})
+
+
+router.get('/confirmation/:id', (req, res, next)=>{
+
+    User.findByIdAndUpdate(req.params.id, {
+        active: true
+    })
+    .then(()=>{
+        req.flash('error', "thanks for confirming your email please log in to continue")
+        res.redirect('/')
+    })
+
+
 })
 
 
@@ -76,6 +137,16 @@ User.findOne({ username: username })
 
         res.redirect('/');
       }
+
+      if(!userfromDB.active){
+        req.flash('error', 'Please confirm your email before logging in');
+        res.redirect('/');
+
+
+      }
+
+
+
       if (bcrypt.compareSync(password, userfromDB.password)) {
         // Save the login in the session!
         req.session.currentuser = userfromDB;

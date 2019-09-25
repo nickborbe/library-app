@@ -60,6 +60,11 @@ router.get('/books/create-new-book', (req, res, next)=>{
 
 router.post('/books/creation', (req, res, next)=>{
 
+    if(!req.session.currentuser){
+        req.flash('error', "please log in to use this feature")
+        res.redirect('/login')
+    }
+
     console.log('=-=-=--=--=', req.body)
 
     let title = req.body.theTitle;
